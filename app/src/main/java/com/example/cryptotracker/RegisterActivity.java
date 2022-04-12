@@ -1,12 +1,20 @@
 package com.example.cryptotracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -19,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText passwordConfirmEditText;
 
     private SharedPreferences preferences;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
         passwordEditText.setText(password);
         passwordConfirmEditText.setText(password);
 
+        mAuth = FirebaseAuth.getInstance();
+
         Log.i(LOG_TAG, "onCreate");
     }
 
@@ -59,11 +70,28 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         Log.i(LOG_TAG, "Regisztrált: " + userName + ", e-mail: " + email);
-        // TODO: A regisztrációs funkcionalitást meg kellene valósítani egyszer.
+
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Log.d(LOG_TAG, "User created successfully");
+                    startCryptoSite();
+                } else {
+                    Log.d(LOG_TAG, "User wasn't created successfully");
+                    Toast.makeText(RegisterActivity.this, "User wasn't created successfully: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     public void cancel(View view) {
         finish();
+    }
+
+    private void startCryptoSite(){
+        Intent intent = new Intent(this, CryptoSiteActivity.class);
+        startActivity(intent);
     }
 
     @Override
