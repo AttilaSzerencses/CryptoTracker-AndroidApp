@@ -114,8 +114,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public void loginAsGuest(View view) {
+            mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()){
+                        Log.d(LOG_TAG, "User login successfully");
+                        startCryptoSite();
+                    } else{
+                        Log.d(LOG_TAG, "User login fail");
+                        Toast.makeText(MainActivity.this, "User login fail: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
     }
 
-    public void loginWithGoogle(View view) {
-    }
+
 }
