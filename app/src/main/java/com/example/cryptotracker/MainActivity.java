@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -60,6 +61,17 @@ public class MainActivity extends AppCompatActivity {
         public void login(View view) {
             String userName = userNameET.getText().toString();
             String password = passwordET.getText().toString();
+
+            if (TextUtils.isEmpty(userName)){
+                userNameET.setError("Cannot be empty!");
+                return;
+            }
+
+            if (TextUtils.isEmpty(password)){
+                passwordET.setError("Cannot be empty!");
+                return;
+            }
+
 
             Log.i(LOG_TAG, "Bejelentkezett: " + userName + ", jelszó: " + password);
             mAuth.signInWithEmailAndPassword(userName,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

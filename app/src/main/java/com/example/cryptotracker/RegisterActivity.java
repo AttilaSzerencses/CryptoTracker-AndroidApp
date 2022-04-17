@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -66,6 +67,26 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (!password.equals(passwordConfirm)) {
             Log.e(LOG_TAG, "Nem egyenlő a jelszó és a megerősítése.");
+            return;
+        }
+
+        if (TextUtils.isEmpty(userName)){
+            userNameEditText.setError("Cannot be empty!");
+            return;
+        }
+
+        if (TextUtils.isEmpty(email)){
+            userEmailEditText.setError("Cannot be empty!");
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)){
+            passwordEditText.setError("Cannot be empty!");
+            return;
+        }
+
+        if (TextUtils.isEmpty(passwordConfirm)){
+            passwordConfirmEditText.setError("Cannot be empty!");
             return;
         }
 
