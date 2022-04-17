@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        />
+    <item
+        android:id="@+id/crypto_currencies"
+        android:title="Crypto Currencies"
+        android:icon="@drawable/ic_crypto_currencies"
+        app:showAsAction="always"
+        android:orderInCategory="2"
+        />
+    <item
+        android:id="@+id/log_out_button"
+        android:title="Logout"
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="always"
+        android:orderInCategory="3"
+        />
+</menu>
