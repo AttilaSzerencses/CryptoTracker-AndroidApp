@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -80,6 +81,8 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
 
             itemView.findViewById(R.id.favorite).setOnClickListener(view -> {
                 //TODO: Crypto eltárolása a profile fül alá
+                Animation animation = AnimationUtils.loadAnimation(context,R.anim.rotation);
+                itemView.findViewById(R.id.favorite).startAnimation(animation);
                 mNotificationHelper.send("You're saving " +nameTV.getText()+ " to your saved list!");
             });
         }
