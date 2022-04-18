@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blac_shade_1"
     tools:context=".RegisterActivity">
 
     <TextView
@@ -12,10 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="@string/registration"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
         android:textSize="24sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:textAlignment="center"/>
+        android:textAlignment="center" />
 
     <EditText
         android:id="@+id/userNameEditText"
@@ -26,6 +30,9 @@
         android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="@string/user_name"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
         android:inputType="textPersonName"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -40,6 +47,9 @@
         android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="@string/email_address"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
         android:inputType="textEmailAddress"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -54,6 +64,9 @@
         android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="@string/password"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
         android:inputType="textPassword"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -68,6 +81,9 @@
         android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="@string/password_again"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
         android:inputType="textPassword"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -85,6 +101,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/registration"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/green"
             android:onClick="register"/>
 
         <Button
@@ -92,6 +110,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="@string/cancel"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/green"
             android:onClick="cancel"/>
 
     </LinearLayout>

@@ -144,7 +144,7 @@ public class CryptoSiteActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void startCryptoSite(){
+    public void startCryptoSite(){
         Intent intent = new Intent(this, CryptoSiteActivity.class);
         finish();
         startActivity(intent);
