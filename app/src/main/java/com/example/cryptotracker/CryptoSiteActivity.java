@@ -5,8 +5,11 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -47,6 +50,7 @@ public class CryptoSiteActivity extends AppCompatActivity {
     private ProgressBar loadingPB;
     private ArrayList<CurrencyModel> currencyModelArrayList;
     private CurrencyRVAdapter currencyRVAdapter;
+    private NotificationHelper mNotificationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,9 @@ public class CryptoSiteActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Unauthenticated user!");
             finish();
         }
+
+        mNotificationHelper = new NotificationHelper(this);
+        //mNotificationHelper.send("Welcome here!");
     }
 
     private void filterCurrencies(String currency){
@@ -175,5 +182,6 @@ public class CryptoSiteActivity extends AppCompatActivity {
         }
         return true;
     }
+
 
 }
