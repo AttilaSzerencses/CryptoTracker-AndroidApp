@@ -32,12 +32,17 @@ import com.example.cryptotracker.adapter.CurrencyRVAdapter;
 import com.example.cryptotracker.modul.CurrencyModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +57,10 @@ public class CryptoSiteActivity extends AppCompatActivity {
     private CurrencyRVAdapter currencyRVAdapter;
     private NotificationHelper mNotificationHelper;
 
+    private FirebaseFirestore mFirestore;
+    private CollectionReference mItems;
+    private Integer itemLimit = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +73,11 @@ public class CryptoSiteActivity extends AppCompatActivity {
         currencyRVAdapter = new CurrencyRVAdapter(currencyModelArrayList, this);
         currenciesRV.setLayoutManager(new LinearLayoutManager(this));
         currenciesRV.setAdapter(currencyRVAdapter);
-        getCurrencyData();
+        mFirestore = FirebaseFirestore.getInstance();
+        mItems = mFirestore.collection("Crypto_Currencies");
+        queryData();
+
+
 
         serachEdt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -127,7 +140,11 @@ public class CryptoSiteActivity extends AppCompatActivity {
                         JSONObject qoute = dataObj.getJSONObject("quote");
                         JSONObject USD = qoute.getJSONObject("USD");
                         double price = USD.getDouble("price");
-                        currencyModelArrayList.add(new CurrencyModel(name, symbol, price));
+                        mItems.add(new CurrencyModel(
+                                name,
+                                symbol,
+                                price
+                        ));
                     }
                 } catch (JSONException e){
                     e.printStackTrace();
@@ -149,6 +166,24 @@ public class CryptoSiteActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void queryData(){
+        currencyModelArrayList.clear();
+        mItems.limit(itemLimit).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                CurrencyModel item = document.toObject(CurrencyModel.class);
+                currencyModelArrayList.add(item);
+            }
+
+            if (currencyModelArrayList.size() == 0) {
+                getCurrencyData();
+                queryData();
+            }
+
+            // Notify the adapter of the change.
+            currencyRVAdapter.notifyDataSetChanged();
+        });
     }
 
     public void startCryptoSite(){

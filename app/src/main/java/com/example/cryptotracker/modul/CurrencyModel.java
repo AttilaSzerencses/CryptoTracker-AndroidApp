@@ -35,5 +35,6 @@ public class CurrencyModel {
         this.price = price;
     }
 
-
+    public CurrencyModel() {
+    }
 }
