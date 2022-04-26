@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cryptotracker.CryptoSiteActivity;
 import com.example.cryptotracker.NotificationHelper;
 import com.example.cryptotracker.R;
 import com.example.cryptotracker.modul.CurrencyModel;
@@ -27,6 +27,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
     private Context context;
     private NotificationHelper mNotificationHelper;
     private int lastPosition = -1;
+    private static final String LOG_TAG = CryptoSiteActivity.class.getName();
 
     public CurrencyRVAdapter(ArrayList<CurrencyModel> currencyModals, Context context) {
         this.currencyModals = currencyModals;
@@ -54,9 +55,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
     @Override
     public void onBindViewHolder(@NonNull CurrencyRVAdapter.CurrencyViewholder holder, int position) {
         CurrencyModel modal = currencyModals.get(position);
-        holder.nameTV.setText(modal.getName());
-        holder.rateTV.setText("$ " + df2.format(modal.getPrice()));
-        holder.symbolTV.setText(modal.getSymbol());
+        holder.bindTo(modal);
 
         if(holder.getAdapterPosition() > lastPosition){
             Animation animation = AnimationUtils.loadAnimation(context,R.anim.slide_in_row);
@@ -69,7 +68,6 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
     public int getItemCount() {
         return currencyModals.size();
     }
-
     public class CurrencyViewholder extends RecyclerView.ViewHolder {
         private TextView symbolTV, rateTV, nameTV;
 
@@ -79,12 +77,20 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
             rateTV = itemView.findViewById(R.id.idTVRate);
             nameTV = itemView.findViewById(R.id.idTVName);
 
-            itemView.findViewById(R.id.favorite).setOnClickListener(view -> {
-                //TODO: Crypto eltárolása a profile fül alá
+        }
+
+        void bindTo(CurrencyModel currentItem){
+            nameTV.setText(currentItem.getName());
+            rateTV.setText(currentItem.getPrice()+" $");
+            symbolTV.setText(currentItem.getSymbol());
+
+            itemView.findViewById(R.id.deleteCrypto).setOnClickListener(view -> {
                 Animation animation = AnimationUtils.loadAnimation(context,R.anim.rotation);
-                itemView.findViewById(R.id.favorite).startAnimation(animation);
-                mNotificationHelper.send("You're saving " +nameTV.getText()+ " to your saved list!");
+                itemView.findViewById(R.id.deleteCrypto).startAnimation(animation);
+                ((CryptoSiteActivity)context).deleteItem(currentItem);
+                mNotificationHelper.send("You're deleting " +nameTV.getText()+ " successfully!");
             });
+
         }
     }
 }

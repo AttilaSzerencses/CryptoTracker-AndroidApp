@@ -4,17 +4,32 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends AppCompatActivity {
+    private FirebaseUser user;
+    private static final String LOG_TAG = CryptoSiteActivity.class.getName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            Log.d(LOG_TAG, "Authenticated user!");
+        } else{
+            Log.d(LOG_TAG, "Unauthenticated user!");
+            finish();
+        }
+
     }
 
 
@@ -51,4 +66,9 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "You left the profile site.", Toast.LENGTH_LONG).show();
+    }
 }

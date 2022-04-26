@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         private SharedPreferences preferences;
         private FirebaseAuth mAuth;
-        private GoogleSignInClient mGoogleSignInClient;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +49,7 @@ public class MainActivity extends AppCompatActivity {
             preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
             mAuth = FirebaseAuth.getInstance();
 
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build();
-            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
             Log.i(LOG_TAG, "onCreate");
         }
 
@@ -188,8 +183,4 @@ public class MainActivity extends AppCompatActivity {
             });
     }
 
-    public void loginWithGoogle(View view) {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
 }

@@ -1,33 +1,20 @@
 package com.example.cryptotracker;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.cryptotracker.adapter.CurrencyRVAdapter;
 import com.example.cryptotracker.modul.CurrencyModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,16 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CryptoSiteActivity extends AppCompatActivity {
 
@@ -59,7 +40,7 @@ public class CryptoSiteActivity extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
     private CollectionReference mItems;
-    private Integer itemLimit = 100;
+    private int limit = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +87,6 @@ public class CryptoSiteActivity extends AppCompatActivity {
         }
 
         mNotificationHelper = new NotificationHelper(this);
-        //mNotificationHelper.send("Welcome here!");
     }
 
     private void filterCurrencies(String currency){
@@ -123,67 +103,70 @@ public class CryptoSiteActivity extends AppCompatActivity {
         }
     }
 
-    private void getCurrencyData(){
-        loadingPB.setVisibility(View.VISIBLE);
-        String url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                loadingPB.setVisibility(View.GONE);
-                try {
-                    JSONArray dataArray = response.getJSONArray("data");
-                    for (int i = 0; i < dataArray.length(); i++) {
-                        JSONObject dataObj = dataArray.getJSONObject(i);
-                        String name = dataObj.getString("name");
-                        String symbol = dataObj.getString("symbol");
-                        JSONObject qoute = dataObj.getJSONObject("quote");
-                        JSONObject USD = qoute.getJSONObject("USD");
-                        double price = USD.getDouble("price");
-                        mItems.add(new CurrencyModel(
-                                name,
-                                symbol,
-                                price
-                        ));
-                    }
-                } catch (JSONException e){
-                    e.printStackTrace();
-                    Toast.makeText(CryptoSiteActivity.this, "Fail to extract json data..", Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loadingPB.setVisibility(View.GONE);
-                Toast.makeText(CryptoSiteActivity.this, "Fail to get data...", Toast.LENGTH_LONG).show();
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap<>();
-                headers.put("X-CMC_PRO_API_KEY","59eafc97-9adf-4a5c-b2b4-8c096824b6b3");
-                return headers;
-            }
-        };
-        requestQueue.add(jsonObjectRequest);
+    private void initializeData() {
+        // Get the resources from the XML file.
+        String[] itemsName = getResources()
+                .getStringArray(R.array.crypto_names);
+        String[] itemsSymbol = getResources()
+                .getStringArray(R.array.crypto_symbol);
+        String[] itemsPrice = getResources()
+                .getStringArray(R.array.crypto_price);
+        for (int i = 0; i < itemsName.length; i++) {
+            mItems.add(new CurrencyModel(
+                    itemsName[i],
+                    itemsSymbol[i],
+                    itemsPrice[i]
+                    ));
+        }
     }
 
     private void queryData(){
         currencyModelArrayList.clear();
-        mItems.limit(itemLimit).get().addOnSuccessListener(queryDocumentSnapshots -> {
+        mItems.limit(limit).orderBy("symbol",Query.Direction.ASCENDING).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                 CurrencyModel item = document.toObject(CurrencyModel.class);
+                item.setId(document.getId());
                 currencyModelArrayList.add(item);
             }
 
             if (currencyModelArrayList.size() == 0) {
-                getCurrencyData();
+                initializeData();
                 queryData();
             }
 
             // Notify the adapter of the change.
             currencyRVAdapter.notifyDataSetChanged();
         });
+    }
+
+    private void queryDataOrdered(){
+        currencyModelArrayList.clear();
+        mItems.limit(limit).orderBy("symbol",Query.Direction.DESCENDING).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                CurrencyModel item = document.toObject(CurrencyModel.class);
+                item.setId(document.getId());
+                currencyModelArrayList.add(item);
+            }
+
+            if (currencyModelArrayList.size() == 0) {
+                initializeData();
+                queryDataOrdered();
+            }
+            currencyRVAdapter.notifyDataSetChanged();
+        });
+    }
+
+
+    public void deleteItem(CurrencyModel item) {
+        DocumentReference ref = mItems.document(item._getId());
+        ref.delete()
+                .addOnSuccessListener(success -> {
+                    Log.d(LOG_TAG, "Item is successfully deleted: " + item._getId());
+                })
+                .addOnFailureListener(fail -> {
+                    Toast.makeText(this, "Item " + item._getId() + " cannot be deleted.", Toast.LENGTH_LONG).show();
+                });
+        queryData();
     }
 
     public void startCryptoSite(){
@@ -193,7 +176,7 @@ public class CryptoSiteActivity extends AppCompatActivity {
     }
 
     public void startProfileSite(){
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, InsertCryptoAcitvity.class);
         finish();
         startActivity(intent);
     }
@@ -201,7 +184,7 @@ public class CryptoSiteActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.crypto_menu, menu);
+        getMenuInflater().inflate(R.menu.menu2, menu);
         return true;
     }
 
@@ -212,8 +195,10 @@ public class CryptoSiteActivity extends AppCompatActivity {
             finish();
         } else if (item.getItemId() == R.id.crypto_currencies){
             startCryptoSite();
-        } else if (item.getItemId() == R.id.profile){
+        } else if (item.getItemId() == R.id.addNewCryptoCurrency){
             startProfileSite();
+        } else if (item.getItemId() == R.id.orderByZA){
+            queryDataOrdered();
         }
         return true;
     }

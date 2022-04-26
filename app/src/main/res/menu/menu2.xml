@@ -3,24 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/orderByZA"
+        android:title="OrderBy"
+        android:icon="@drawable/ic_order"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        />
+    <item
         android:id="@+id/addNewCryptoCurrency"
         android:title="Profile"
         android:icon="@drawable/ic_add"
         app:showAsAction="always"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         />
     <item
         android:id="@+id/crypto_currencies"
         android:title="Crypto Currencies"
         android:icon="@drawable/ic_crypto_currencies"
         app:showAsAction="always"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         />
     <item
         android:id="@+id/log_out_button"
         android:title="Logout"
         android:icon="@drawable/ic_logout"
         app:showAsAction="always"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         />
 </menu>

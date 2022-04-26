@@ -1,22 +1,104 @@
 <resources>
     <string name="app_name">CryptoTracker</string>
-    <string name="name">Név</string>
-    <string name="password">Jelszó</string>
-    <string name="login">Bejelentkezés</string>
-    <string name="registration">Regisztráció</string>
-    <string name="user_name">Felhasználónév</string>
-    <string name="email_address">E-mail cím</string>
-    <string name="password_again">Jelszó megerősítése</string>
-    <string name="cancel">Mégse</string>
-    <string name="phone_number">Telefonszám</string>
-    <string name="address">Cím</string>
-    <string name="account_type">Fiók típusa</string>
-    <string name="signInWithGoogle">Bejelentkezés google fiókkal</string>
-    <string name="signInAsGuest">Bejelentekezés vendégként</string>
-    <string-array name="phone_labels">
-        <item>Otthon</item>
-        <item>Munkahely</item>
-        <item>Mobil</item>
-        <item>Egyéb</item>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="registration">Registration</string>
+    <string name="user_name">Username</string>
+    <string name="email_address">E-mail address</string>
+    <string name="password_again">Password again</string>
+    <string name="cancel">Cancel</string>
+    <string name="phone_number">Phone number</string>
+    <string name="address">Address</string>
+    <string name="account_type">Account Type</string>
+    <string name="signInAsGuest">Login as anonymus</string>
+    <string name="add_new_crypto_currency">Add new Crypto Currency</string>
+    <string name="price">Price</string>
+    <string name="symbol_abridgment">Symbol(abridgment)</string>
+    <string name="add">Add</string>
+    <string name="crypto_name">Crypto name</string>
+    <string-array name="crypto_names">
+        <item>Bitcoin</item>
+        <item>Ethereum</item>
+        <item>Moonbeam</item>
+        <item>Shiba Inu</item>
+        <item>Avalanche</item>
+        <item>Tezos</item>
+        <item>Helium</item>
+        <item>Nexo</item>
+        <item>Solana</item>
+        <item>BNB</item>
+        <item>OKB</item>
+        <item>Algorand</item>
+        <item>Waves</item>
+        <item>TRON</item>
+        <item>Decred</item>
+        <item>Dogecoin</item>
+        <item>Terra</item>
+        <item>Neo</item>
+        <item>Dai</item>
+        <item>Cosmos</item>
+        <item>Gala</item>
+        <item>Fantom</item>
+        <item>Polygon</item>
+        <item>XRP</item>
+        <item>Litecoin</item>
+        <item>PancakeSwap</item>
+    </string-array>
+    <string-array name="crypto_symbol">
+        <item>BTC</item>
+        <item>ETH</item>
+        <item>GLMR</item>
+        <item>SHIB</item>
+        <item>AVAX</item>
+        <item>XTZ</item>
+        <item>HNT</item>
+        <item>NEXO</item>
+        <item>SOL</item>
+        <item>BNB</item>
+        <item>OKB</item>
+        <item>ALGO</item>
+        <item>WAVES</item>
+        <item>TRX</item>
+        <item>DCR</item>
+        <item>DOGE</item>
+        <item>LUNA</item>
+        <item>NEO</item>
+        <item>DAI</item>
+        <item>ATOM</item>
+        <item>GALA</item>
+        <item>FTM</item>
+        <item>MATIC</item>
+        <item>XRP</item>
+        <item>LTC</item>
+        <item>cake</item>
+    </string-array>
+    <string-array name="crypto_price">
+        <item>40936.6453</item>
+        <item>2999.5662</item>
+        <item>4.0488</item>
+        <item>0.000024</item>
+        <item>77.0676</item>
+        <item>3.1363</item>
+        <item>18.8365</item>
+        <item>2.3559</item>
+        <item>105.2889</item>
+        <item>413.0149</item>
+        <item>19.2958</item>
+        <item>0.7415</item>
+        <item>20.0828</item>
+        <item>0.0715</item>
+        <item>72.4089</item>
+        <item>0.1384</item>
+        <item>96.3537</item>
+        <item>21.6213</item>
+        <item>0.9996</item>
+        <item>23.9753</item>
+        <item>0.1936</item>
+        <item>1.1589</item>
+        <item>1.4181</item>
+        <item>0.7474</item>
+        <item>110.4231</item>
+        <item>9.2814</item>
     </string-array>
 </resources>
